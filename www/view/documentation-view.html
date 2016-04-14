@@ -1,0 +1,40 @@
+<link href="css/simplemde.min.css" rel="stylesheet">
+<script src="js/simplemde.min.js"></script>
+
+<script>
+  /* Load general project values */
+  if (projectRootObject.documentation[currentDocumentationIndex].hasOwnProperty("title")) {
+    $("#general-view-title").val(projectRootObject.documentation[currentDocumentationIndex].title);
+  }
+
+  if (projectRootObject.documentation[currentDocumentationIndex].hasOwnProperty("content")) {
+    $("#general-view-content").val(projectRootObject.documentation[currentDocumentationIndex].content);
+  }
+
+  /* Setup SimpleMDE */
+  var simplemde = new SimpleMDE({
+    element: $("#general-view-content")[0]
+  });
+
+  /* Setup SimpleMDE saving events*/
+  simplemde.codemirror.on("change", () => {
+    projectRootObject.documentation[currentDocumentationIndex].content = simplemde.value();
+  });
+
+  simplemde.codemirror.on("blur", saveProject);
+
+  /* Setup events for title input field */
+  $("#general-view-title").keyup(() => {
+    $("#sidebar-documentation-block-row-item-" + currentDocumentationIndex).text($("#general-view-title").val());
+    projectRootObject.documentation[currentDocumentationIndex].title = $("#general-view-title").val();
+  });
+  $("#general-view-title").focusout(saveProject);
+</script>
+
+<h2>Documentation</h2>
+
+<div style="padding: 4px">
+  <input style="margin: 10px 0; width: 100%" id="general-view-title" placeholder="Title">
+  <br />
+  <textarea id="general-view-content"></textarea>
+</div>

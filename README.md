@@ -19,3 +19,9 @@ node app.js
 ```
 
 Now you can open editor with link: http://localhost:3000
+
+## Contribute
+If you like this project, please contribute to it, help me to do it better!
+
+## License
+This project under GPLv3 license

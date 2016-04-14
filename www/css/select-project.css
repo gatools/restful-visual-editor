@@ -1,0 +1,38 @@
+/*!
+ * RESTful Visual Editor
+ * https://github.com/gatools/restful-visual-editor
+ *
+ * Copyright(c) 2016 Vasiliy Uglitskiy.
+ * Open source under GPLv3 license.
+ */
+
+#projects {
+    min-height: calc(100vh - 0.5in - 0.75in);
+    /* used for set footer at the bottom, 0.5in is footer height, 0.75in is header height*/
+}
+#projects ul {
+    background: #fff;
+    border: 2px solid #333;
+    border-radius: 6px;
+    padding: 0px;
+    min-width: 3in;
+    overflow: hidden;
+}
+#projects ul li {
+    list-style-type: none;
+    padding: 8px;
+    text-align: center;
+}
+#create-new-project {
+    color: #fff;
+    background: #333;
+}
+#project-dialog {
+    display: none;
+    background: #fff;
+    border: 2px solid #333;
+    border-radius: 6px;
+    height: 1in;
+    min-width: 3in;
+    text-align: center;
+}

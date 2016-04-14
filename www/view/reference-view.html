@@ -1,0 +1,954 @@
+<script>
+  function checkIfMethodAvailableAndMakeIt(method) {
+    if (!projectRootObject.reference[currentReferenceIndex].request.hasOwnProperty(method)) {
+      projectRootObject.reference[currentReferenceIndex].request[method] = {};
+    }
+  }
+
+  function checkIfPropertyArrayAvailableAndMakeIt(method, propertyArray) {
+    if (!projectRootObject.reference[currentReferenceIndex].request[method].hasOwnProperty(propertyArray)) {
+      projectRootObject.reference[currentReferenceIndex].request[method][propertyArray] = [];
+    }
+  }
+
+  /* Adds new header view setting for given method type
+   *
+   * @param method is a string of request methos type (get, post, ...)
+   * @param index is an index of header
+   * @param values is a object that should be {description:"", name:"", required: int}
+   */
+  function addHeader(method, index, values) {
+    var root = $('<tr></tr>');
+
+    var tdDescription = $('<input class="methods-description" placeholder="Description"/>');
+    tdDescription.attr("id", "methods-" + method + "-headers-header-" + index + "-description");
+    tdDescription.keyup((event) => {
+      projectRootObject.reference[currentReferenceIndex].request[method].headers[index].description = event.currentTarget.value;
+    });
+    tdDescription.focusout(saveProject);
+
+    var tdName = $('<input class="methods-description" placeholder="Name"/>');
+    tdName.attr("id", "methods-" + method + "-headers-header-" + index + "-name");
+    tdName.keyup((event) => {
+      projectRootObject.reference[currentReferenceIndex].request[method].headers[index].name = event.currentTarget.value;
+    });
+    tdName.focusout(saveProject);
+
+    var tdRequired = $('<input type="checkbox"/>');
+    tdRequired.attr("id", "methods-" + method + "-headers-header-" + index + "-required");
+    tdRequired.attr("title", "Required");
+    tdRequired.click(() => {
+      projectRootObject.reference[currentReferenceIndex].request[method].headers[index].required = tdRequired.prop("checked");
+      saveProject();
+    });
+
+    if (values) {
+      tdDescription.val(values.description);
+      tdName.val(values.name);
+      tdRequired.prop("checked", values.required);
+    }
+
+    root.append($('<td></td>').append(tdDescription), $('<td></td>').append(tdName), $('<td></td>').append(tdRequired));
+
+    $('#methods-' + method + '-headers').append(root);
+  };
+
+  /* Adds new query parametr view setting for given method type
+   *
+   * @param method is a string of request methos type (get, post, ...)
+   * @param index is an index of query parametr
+   * @param values is a object that should be {description:"", name:"", required: int}
+   */
+  function addQueryParameter(method, index, values) {
+    var root = $('<tr></tr>');
+
+    var tdDescription = $('<input class="methods-description" placeholder="Description"/>');
+    tdDescription.attr("id", "methods-" + method + "-url-params-param-" + index + "-description");
+    tdDescription.keyup((event) => {
+      projectRootObject.reference[currentReferenceIndex].request[method].queryParameters[index].description = event.currentTarget.value;
+    });
+    tdDescription.focusout(saveProject);
+
+    var tdName = $('<input class="methods-description" placeholder="Name"/>');
+    tdName.attr("id", "methods-" + method + "-url-params-param-" + index + "-name");
+    tdName.keyup((event) => {
+      projectRootObject.reference[currentReferenceIndex].request[method].queryParameters[index].name = event.currentTarget.value;
+    });
+    tdName.focusout(saveProject);
+
+    var tdRequired = $('<input type="checkbox"/>');
+    tdRequired.attr("id", "methods-" + method + "-url-params-param-" + index + "-required");
+    tdRequired.attr("title", "Required");
+    tdRequired.click(() => {
+      projectRootObject.reference[currentReferenceIndex].request[method].queryParameters[index].required = tdRequired.prop("checked");
+      saveProject();
+    });
+
+    if (values) {
+      tdDescription.val(values.description);
+      tdName.val(values.name);
+      tdRequired.prop("checked", values.required);
+    }
+
+    root.append($('<td></td>').append(tdDescription), $('<td></td>').append(tdName), $('<td></td>').append(tdRequired));
+
+    $('#methods-' + method + '-url-params').append(root);
+  };
+
+  /* Adds new example view setting for given method type
+   *
+   * @param method is a string of request methos type (get, post, ...)
+   * @param index is an index of query parametr
+   * @param values is a object that should be {description:"", example:""}
+   */
+  function addExample(method, index, values) {
+    var root = $('<tr></tr>');
+
+    var tdDescription = $('<input class="methods-description" placeholder="Description"/>');
+    tdDescription.attr("id", "methods-" + method + "-examples-example-" + index + "-description");
+    tdDescription.keyup((event) => {
+      projectRootObject.reference[currentReferenceIndex].request[method].examples[index].description = event.currentTarget.value;
+    });
+    tdDescription.focusout(saveProject);
+
+    var tdExample = $('<textarea />');
+    tdExample.attr("id", "methods-" + method + "-examples-example-" + index + "-example");
+    tdExample.keyup((event) => {
+      projectRootObject.reference[currentReferenceIndex].request[method].examples[index].example = event.currentTarget.value;
+    });
+    tdExample.focusout(saveProject);
+
+    if (values) {
+      tdDescription.val(values.description);
+      tdExample.val(values.example);
+    }
+
+    root.append($('<td></td>').append(tdDescription), $('<td></td>').append(tdExample));
+
+    $('#methods-' + method + '-examples').append(root);
+  };
+
+  /* Adds new respond view setting for given method type
+   *
+   * @param method is a string of request methos type (get, post, ...)
+   * @param index is an index of query parametr
+   * @param values is a object that should be {description:"", code:"", example:""}
+   */
+  function addResponse(method, index, values) {
+    var root = $('<tr></tr>');
+
+    var tdCode = $('<input class="methods-description" placeholder="Code"/>');
+    tdCode.attr("id", "methods-" + method + "-responses-response-" + index + "-code");
+    tdCode.keyup((event) => {
+      projectRootObject.reference[currentReferenceIndex].request[method].responses[index].code = event.currentTarget.value;
+    });
+    tdCode.focusout(saveProject);
+
+    var tdDescription = $('<input class="methods-description" placeholder="Description"/>');
+    tdDescription.attr("id", "methods-" + method + "-responses-response-" + index + "-description");
+    tdDescription.keyup((event) => {
+      projectRootObject.reference[currentReferenceIndex].request[method].responses[index].description = event.currentTarget.value;
+    });
+    tdDescription.focusout(saveProject);
+
+    var tdExample = $('<textarea />');
+    tdExample.attr("id", "methods-" + method + "-responses-response-" + index + "-example");
+    tdExample.keyup((event) => {
+      projectRootObject.reference[currentReferenceIndex].request[method].responses[index].example = event.currentTarget.value;
+    });
+    tdExample.focusout(saveProject);
+
+    if (values) {
+      tdCode.val(values.code);
+      tdDescription.val(values.description);
+      tdExample.val(values.example);
+    }
+
+    root.append($('<td></td>').append(tdCode), $('<td></td>').append(tdDescription), $('<td></td>').append(tdExample));
+
+    $('#methods-' + method + '-responses').append(root);
+  };
+
+  /* Prepare current reference and load values */
+  if (projectRootObject.reference[currentReferenceIndex].hasOwnProperty("path")) {
+    $('#reference-view-path').val(projectRootObject.reference[currentReferenceIndex].path);
+  }
+
+  if (projectRootObject.reference[currentReferenceIndex].hasOwnProperty("title")) {
+    $('#reference-view-title').val(projectRootObject.reference[currentReferenceIndex].title);
+  }
+
+  if (projectRootObject.reference[currentReferenceIndex].hasOwnProperty("description")) {
+    $('#reference-view-description').val(projectRootObject.reference[currentReferenceIndex].description);
+  }
+
+  if (projectRootObject.reference[currentReferenceIndex].hasOwnProperty("request")) {
+    for (var key in projectRootObject.reference[currentReferenceIndex].request) {
+
+      if (projectRootObject.reference[currentReferenceIndex].request[key].hasOwnProperty('description')) {
+        $('#methods-' + key + '-description').val(projectRootObject.reference[currentReferenceIndex].request[key].description);
+      }
+
+      if (projectRootObject.reference[currentReferenceIndex].request[key].hasOwnProperty('type')) {
+        $('#methods-' + key + '-type').val(projectRootObject.reference[currentReferenceIndex].request[key].type);
+      }
+
+      if (projectRootObject.reference[currentReferenceIndex].request[key].hasOwnProperty('schema')) {
+        $('#methods-' + key + '-schema').val(projectRootObject.reference[currentReferenceIndex].request[key].schema);
+      }
+
+      if (projectRootObject.reference[currentReferenceIndex].request[key].hasOwnProperty('headers')) {
+        projectRootObject.reference[currentReferenceIndex].request[key].headers.forEach((item, i, arr) => {
+          var headerData = {
+            description: item.description || "",
+            name: item.name || "",
+            required: item.required || false
+          };
+
+          addHeader(key, i, headerData);
+        });
+      } else {
+        projectRootObject.reference[currentReferenceIndex].request[key].headers = [];
+      }
+      if (projectRootObject.reference[currentReferenceIndex].request[key].hasOwnProperty('queryParameters')) {
+        projectRootObject.reference[currentReferenceIndex].request[key].queryParameters.forEach((item, i, arr) => {
+          var queryData = {
+            description: item.description || "",
+            name: item.name || "",
+            required: item.required || false
+          };
+
+          addQueryParameter(key, i, queryData);
+        });
+      } else {
+        projectRootObject.reference[currentReferenceIndex].request[key].queryParameters = [];
+      }
+      if (projectRootObject.reference[currentReferenceIndex].request[key].hasOwnProperty('examples')) {
+        projectRootObject.reference[currentReferenceIndex].request[key].examples.forEach((item, i, arr) => {
+          var exampleData = {
+            description: item.description || "",
+            example: item.example || ""
+          };
+
+          addExample(key, i, exampleData);
+        });
+      } else {
+        projectRootObject.reference[currentReferenceIndex].request[key].examples = [];
+      }
+      if (projectRootObject.reference[currentReferenceIndex].request[key].hasOwnProperty('responses')) {
+        projectRootObject.reference[currentReferenceIndex].request[key].responses.forEach((item, i, arr) => {
+          var responseData = {
+            code: item.code || "",
+            description: item.description || "",
+            example: item.example || ""
+          };
+
+          addResponse(key, i, responseData);
+        });
+      } else {
+        projectRootObject.reference[currentReferenceIndex].request[key].queryParameters = [];
+      }
+    }
+  } else {
+    projectRootObject.reference[currentReferenceIndex].request = {}
+  }
+
+  /* Setup elements*/
+  $("#tabs-methods").tabs();
+
+  /* Setup event for path input field */
+  $('#reference-view-path').keyup(() => {
+    projectRootObject.reference[currentReferenceIndex].path = $('#reference-view-path').val();
+    $('#sidebar-reference-block-row-item-' + currentReferenceIndex).text(projectRootObject.reference[currentReferenceIndex].path);
+  });
+  $('#reference-view-path').focusout(saveProject);
+
+  /* Setup event for title input field */
+  $('#reference-view-title').keyup(() => {
+    projectRootObject.reference[currentReferenceIndex].title = $('#reference-view-title').val();
+  });
+  $('#reference-view-title').focusout(saveProject);
+
+  /* Setup event for description textarea field */
+  $('#reference-view-description').keyup(() => {
+    projectRootObject.reference[currentReferenceIndex].description = $('#reference-view-description').val();
+  });
+  $('#reference-view-description').focusout(saveProject);
+
+  /* Available method types. If added new, don't forget to add html code */
+  var methodsTypes = [
+    "get",
+    "post",
+    "put",
+    "delete",
+    "patch",
+    "description"
+  ];
+
+  /* Setup elements per method type */
+  methodsTypes.forEach((method, i, arr) => {
+    /* Setup event for method description input field */
+    $('#methods-' + method + '-description').keyup(() => {
+      checkIfMethodAvailableAndMakeIt(method);
+      projectRootObject.reference[currentReferenceIndex].request[method].description = $('#methods-' + method + '-description').val();
+    });
+    $('#methods-' + method + '-description').focusout(saveProject);
+
+    /* Setup event for method type input field */
+    $('#methods-' + method + '-type').keyup(() => {
+      checkIfMethodAvailableAndMakeIt(method);
+      projectRootObject.reference[currentReferenceIndex].request[method].type = $('#methods-' + method + '-type').val();
+    });
+    $('#methods-' + method + '-type').focusout(saveProject);
+
+    /* Setup event for method schema textarea field */
+    $('#methods-' + method + '-schema').keyup(() => {
+      checkIfMethodAvailableAndMakeIt(method);
+      projectRootObject.reference[currentReferenceIndex].request[method].schema = $('#methods-' + method + '-schema').val();
+    });
+    $('#methods-' + method + '-schema').focusout(saveProject);
+
+    /* Setup event for method add header button */
+    $('#methods-' + method + '-add-header').click(() => {
+      checkIfMethodAvailableAndMakeIt(method);
+      checkIfPropertyArrayAvailableAndMakeIt(method, "headers");
+      projectRootObject.reference[currentReferenceIndex].request[method].headers.push({});
+      addHeader(method, $('#methods-' + method + '-headers > tr').length);
+    });
+
+    /* Setup event for method add url param button */
+    $('#methods-' + method + '-add-url-param').click(() => {
+      checkIfMethodAvailableAndMakeIt(method);
+      checkIfPropertyArrayAvailableAndMakeIt(method, "queryParameters");
+      projectRootObject.reference[currentReferenceIndex].request[method].queryParameters.push({});
+      addQueryParameter(method, $('#methods-' + method + '-url-params > tr').length);
+    });
+
+    /* Setup event for method add example button */
+    $('#methods-' + method + '-add-example').click(() => {
+      checkIfMethodAvailableAndMakeIt(method);
+      checkIfPropertyArrayAvailableAndMakeIt(method, "examples");
+      projectRootObject.reference[currentReferenceIndex].request[method].examples.push({});
+      addExample(method, $('#methods-' + method + '-examples > tr').length);
+    });
+
+    /* Setup event for method add response button */
+    $('#methods-' + method + '-add-response').click(() => {
+      checkIfMethodAvailableAndMakeIt(method);
+      checkIfPropertyArrayAvailableAndMakeIt(method, "responses");
+      projectRootObject.reference[currentReferenceIndex].request[method].responses.push({});
+      addResponse(method, $('#methods-' + method + '-responses > tr').length);
+    });
+  });
+</script>
+
+<h2>Reference</h2>
+
+<style type="text/css">
+  .methods-description,
+  .methods-type {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .methods-headers,
+  .methods-examples,
+  .methods-url-params,
+  .methods-responeses {
+    margin: 1em auto;
+    min-height: 1em;
+    border: 1px solid #0a0;
+    width: 100%;
+  }
+
+  .methods-add-header,
+  .methods-add-example,
+  .methods-add-url-param,
+  .methods-add-response {
+    display: block;
+    float: right;
+    background: #0a0;
+    color: #fff;
+    border: 0;
+    padding: 0.3em 0.8em;
+  }
+
+  .methods-add-header:focus,
+  .methods-add-example:focus,
+  .methods-add-url-param:focus,
+  .methods-add-response:focus {
+    outline: none;
+  }
+
+  .methods-add-header:hover,
+  .methods-add-example:hover,
+  .methods-add-url-param:hover,
+  .methods-add-response:hover {
+    background: #33ed33;
+  }
+
+  .tg {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0 auto;
+  }
+
+  .tg td {
+    padding: 10px 5px;
+    border-style: none;
+    border-width: 1px;
+    overflow: hidden;
+    word-break: normal;
+    vertical-align: top;
+  }
+
+  .tg .input,
+  .tg .input input,
+  .tg .input textarea {
+    width: 100%;
+  }
+
+  .tg .button {
+    padding: 0 0 0.3in;
+  }
+
+  .tg .view {
+    padding: 0;
+  }
+</style>
+<table class="tg">
+  <tr>
+    <td class="label">
+      <label for="reference-view-path">Path</label>
+    </td>
+    <td class="input">
+      <input id="reference-view-path" placeholder="/cats">
+    </td>
+  </tr>
+  <tr>
+    <td class="label">
+      <label for="reference-view-title">Title</label>
+    </td>
+    <td class="input">
+      <input id="reference-view-title" placeholder="Cats">
+    </td>
+  </tr>
+  <tr>
+    <td class="label">
+      <label for="reference-view-description">Description</label>
+    </td>
+    <td class="input">
+      <textarea id="reference-view-description" placeholder="Gets list of cats"></textarea>
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+<h2>Request</h2>
+
+<div id="tabs-methods">
+
+  <ul>
+    <li>
+      <a href="#tabs-methods-get">GET</a>
+    </li>
+    <li>
+      <a href="#tabs-methods-post">POST</a>
+    </li>
+    <li>
+      <a href="#tabs-methods-put">PUT</a>
+    </li>
+    <li>
+      <a href="#tabs-methods-delete">DELETE</a>
+    </li>
+    <li>
+      <a href="#tabs-methods-patch">PATCH</a>
+    </li>
+    <li>
+      <a href="#tabs-methods-description">DESCRIPTION</a>
+    </li>
+  </ul>
+
+  <div id="tabs-methods-get">
+
+    <table class="tg">
+      <tr>
+        <td class="label">
+          <label for="methods-get-description">Description</label>
+        </td>
+        <td class="input">
+          <input id=methods-get-description class="methods-description" placeholder="Description" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-get-type">Type</label>
+        </td>
+        <td class="input">
+          <input id=methods-get-type class="methods-type" placeholder="application/json" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-get-schema">Schema</label>
+        </td>
+        <td class="input">
+          <textarea id=methods-get-schema/>
+        </td>
+      </tr>
+    </table>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-get-headers class="methods-headers"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-get-add-header class="methods-add-header">&plus; Add header</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-get-url-params class="methods-url-params"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-get-add-url-param class="methods-add-url-param">&plus; Add URL parametrs
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-get-examples class="methods-examples"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-get-add-example class="methods-add-example">&plus; Add example</button>
+        </td>
+      </tr>
+    </table>
+
+    <h2>Response</h2>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-get-responses class="methods-responeses"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-get-add-response class="methods-add-response">&plus; Add response</button>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+
+  <div id="tabs-methods-post">
+
+    <table class="tg">
+      <tr>
+        <td class="label">
+          <label for="methods-post-description">Description</label>
+        </td>
+        <td class="input">
+          <input id=methods-post-description class="methods-description" placeholder="Description" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-post-type">Type</label>
+        </td>
+        <td class="input">
+          <input id=methods-post-type class="methods-type" placeholder="application/json" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-post-schema">Schema</label>
+        </td>
+        <td class="input">
+          <textarea id=methods-post-schema/>
+        </td>
+      </tr>
+    </table>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-post-headers class="methods-headers"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-post-add-header class="methods-add-header">&plus; Add header</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-post-url-params class="methods-url-params"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-post-add-url-param class="methods-add-url-param">&plus; Add URL parametrs
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-post-examples class="methods-examples"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-post-add-example class="methods-add-example">&plus; Add example</button>
+        </td>
+      </tr>
+    </table>
+
+    <h2>Response</h2>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-post-responses class="methods-responeses"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-post-add-response class="methods-add-response">&plus; Add response</button>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+
+  <div id="tabs-methods-put">
+
+    <table class="tg">
+      <tr>
+        <td class="label">
+          <label for="methods-put-description">Description</label>
+        </td>
+        <td class="input">
+          <input id=methods-put-description class="methods-description" placeholder="Description" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-put-type">Type</label>
+        </td>
+        <td class="input">
+          <input id=methods-put-type class="methods-type" placeholder="application/json" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-put-schema">Schema</label>
+        </td>
+        <td class="input">
+          <textarea id=methods-put-schema/>
+        </td>
+      </tr>
+    </table>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-put-headers class="methods-headers"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-put-add-header class="methods-add-header">&plus; Add header</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-put-url-params class="methods-url-params"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-put-add-url-param class="methods-add-url-param">&plus; Add URL parametrs
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-put-examples class="methods-examples"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-put-add-example class="methods-add-example">&plus; Add example</button>
+        </td>
+      </tr>
+    </table>
+
+    <h2>Response</h2>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-put-responses class="methods-responeses"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-put-add-response class="methods-add-response">&plus; Add response</button>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+
+  <div id="tabs-methods-delete">
+
+    <table class="tg">
+      <tr>
+        <td class="label">
+          <label for="methods-delete-description">Description</label>
+        </td>
+        <td class="input">
+          <input id=methods-delete-description class="methods-description" placeholder="Description" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-delete-type">Type</label>
+        </td>
+        <td class="input">
+          <input id=methods-delete-type class="methods-type" placeholder="application/json" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-delete-schema">Schema</label>
+        </td>
+        <td class="input">
+          <textarea id=methods-delete-schema/>
+        </td>
+      </tr>
+    </table>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-delete-headers class="methods-headers"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-delete-add-header class="methods-add-header">&plus; Add header</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-delete-url-params class="methods-url-params"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-delete-add-url-param class="methods-add-url-param">&plus; Add URL parametrs
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-delete-examples class="methods-examples"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-delete-add-example class="methods-add-example">&plus; Add example</button>
+        </td>
+      </tr>
+    </table>
+
+    <h2>Response</h2>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-delete-responses class="methods-responeses"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-delete-add-response class="methods-add-response">&plus; Add response</button>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+
+  <div id="tabs-methods-patch">
+
+    <table class="tg">
+      <tr>
+        <td class="label">
+          <label for="methods-patch-description">Description</label>
+        </td>
+        <td class="input">
+          <input id=methods-patch-description class="methods-description" placeholder="Description" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-patch-type">Type</label>
+        </td>
+        <td class="input">
+          <input id=methods-patch-type class="methods-type" placeholder="application/json" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-patch-schema">Schema</label>
+        </td>
+        <td class="input">
+          <textarea id=methods-patch-schema/>
+        </td>
+      </tr>
+    </table>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-patch-headers class="methods-headers"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-patch-add-header class="methods-add-header">&plus; Add header</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-patch-url-params class="methods-url-params"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-patch-add-url-param class="methods-add-url-param">&plus; Add URL parametrs
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-patch-examples class="methods-examples"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-patch-add-example class="methods-add-example">&plus; Add example</button>
+        </td>
+      </tr>
+    </table>
+
+    <h2>Response</h2>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-patch-responses class="methods-responeses"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-patch-add-response class="methods-add-response">&plus; Add response</button>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+
+  <div id="tabs-methods-description">
+
+    <table class="tg">
+      <tr>
+        <td class="label">
+          <label for="methods-description-description">Description</label>
+        </td>
+        <td class="input">
+          <input id=methods-description-description class="methods-description" placeholder="Description" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-description-type">Type</label>
+        </td>
+        <td class="input">
+          <input id=methods-description-type class="methods-type" placeholder="application/json" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <label for="methods-description-schema">Schema</label>
+        </td>
+        <td class="input">
+          <textarea id=methods-description-schema/>
+        </td>
+      </tr>
+    </table>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-description-headers class="methods-headers"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-description-add-header class="methods-add-header">&plus; Add header</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-description-url-params class="methods-url-params"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-description-add-url-param class="methods-add-url-param">&plus; Add URL parametrs
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td class="view">
+          <table id=methods-description-examples class="methods-examples"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-description-add-example class="methods-add-example">&plus; Add example</button>
+        </td>
+      </tr>
+    </table>
+
+    <h2>Response</h2>
+
+    <table class="tg">
+      <tr>
+        <td class="view">
+          <table id=methods-description-responses class="methods-responeses"></table>
+        </td>
+      </tr>
+      <tr>
+        <td class="button">
+          <button id=methods-description-add-response class="methods-add-response">&plus; Add response</button>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+
+</div>

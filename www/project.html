@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="us">
+
+<head>
+	<meta charset="utf-8">
+	<title>RESTful Visual Editor</title>
+	<link href="css/main.css" rel="stylesheet">
+	<link href="css/jquery-ui.css" rel="stylesheet">
+</head>
+
+<body>
+	<script type='text/javascript'>
+		/* Project global varibles */
+		projectRootObject = {};
+		projectFileName = "";
+		currentDocumentationIndex = -1;
+		currentReferenceIndex = -1;
+	</script>
+
+	<script src="js/jquery-2.2.0.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/js.cookie.js"></script>
+	<script src="js/resrful-visual-editor.js"></script>
+
+	<div id='loading_wrap' class="center-middle">Loading, please wait...</div>
+
+	<div id="header">
+		<div>
+			<h1 id="project-title">{ProjectTitle}</h1>
+			<h4 id="project-url">{ProjectURL}</h4>
+		</div>
+	</div>
+
+	<div id="sidebar">
+		<div id="sidebar-bg"></div>
+
+		<h3 id="sidebar-general-title" class="clickable">General</h3>
+
+		<h3 id="sidebar-documentation-title" class="clickable">Documentation</h3>
+		<div id="sidebar-documentation-block">
+			<div id="sidebar-documentation-block-add-new-item" class="clickable sidebar-row">&plus; Add new item</div>
+		</div>
+
+		<h3 id="sidebar-reference-title" class="clickable">Reference</h3>
+		<div id="sidebar-reference-block">
+			<div id="sidebar-reference-block-add-new-item" class="clickable sidebar-row">&plus; Add new reference</div>
+		</div>
+
+	</div>
+
+	<div id="content"></div>
+
+	<footer id="footer">
+		RESTful Visual Editor. Copyright&copy; 2016 Vasiliy Uglitskiy. Open source under GPLv3 license.
+	</footer>
+
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<!--<link href="css/general-view.css" rel="stylesheet">-->
+
+<script>
+  /* Load general project values */
+  $("#general-view-name").val(projectRootObject.title);
+  $("#general-view-version").val(projectRootObject.api_version);
+  $("#general-view-url").val(projectRootObject.url);
+  $("#general-view-description").val(projectRootObject.description);
+
+  /* Setup events for name input field */
+  $("#general-view-name").keyup(() => {
+    projectRootObject.title = $("#general-view-name").val(); // Note: $(this) generates "Uncaught TypeError: Cannot read property 'toLowerCase' of undefined"
+  });
+
+  /* Setup events for version input field */
+  $("#general-view-version").keyup(() => {
+    projectRootObject.api_version = $("#general-view-version").val(); // Note: $(this) generates "Uncaught TypeError: Cannot read property 'toLowerCase' of undefined"
+  });
+
+  /* Setup events for url input field */
+  $("#general-view-url").keyup(() => {
+    projectRootObject.url = $("#general-view-url").val(); // Note: $(this) generates "Uncaught TypeError: Cannot read property 'toLowerCase' of undefined"
+  });
+
+  /* Setup events for description input field */
+  $("#general-view-description").on('keyup', () => {
+    projectRootObject.description = $("#general-view-description").val(); // Note: $(this) generates "Uncaught TypeError: Cannot read property 'toLowerCase' of undefined"
+  });
+
+  /* Setup events for saving project */
+  $("#general-view-name").focusout(() => {
+    $("#project-title").text($("#general-view-name").val());
+    saveProject();
+  });
+  $("#general-view-version").focusout(saveProject);
+  $("#general-view-url").focusout(() => {
+    $("#project-url").text($("#general-view-url").val());
+    saveProject();
+  });
+  $("#general-view-description").focusout(saveProject);
+</script>
+
+<h2>General information</h2>
+
+<style type="text/css">
+  .tg {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0px auto;
+  }
+
+  .tg td {
+    padding: 10px 5px;
+    border-style: none;
+    border-width: 1px;
+    overflow: hidden;
+    word-break: normal;
+    vertical-align: top
+  }
+
+  .tg .input,
+  .tg .input input,
+  .tg .input textarea {
+    width: 100%
+  }
+</style>
+<table class="tg">
+  <tr>
+    <td class="label">
+      <label for="general-view-name">Name</label>
+    </td>
+    <td class="input">
+      <input id="general-view-name" placeholder="API Documentation">
+    </td>
+  </tr>
+  <tr>
+    <td class="label">
+      <label for="general-view-version">Version</label>
+    </td>
+    <td class="input">
+      <input id="general-view-version" placeholder="0.1">
+    </td>
+  </tr>
+  <tr>
+    <td class="label">
+      <label for="general-view-url">URL</label>
+    </td>
+    <td class="input">
+      <input id="general-view-url" placeholder="http://api.example.com">
+    </td>
+  </tr>
+  <tr>
+    <td class="label">
+      <label for="general-view-description">Description</label>
+    </td>
+    <td class="input">
+      <textarea id="general-view-description" placeholder="API Documentation for http://api.example.com version 0.1"></textarea>
+    </td>
+  </tr>
+</table>

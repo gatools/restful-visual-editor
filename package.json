@@ -1,0 +1,21 @@
+{
+  "name": "restful-visual-editor",
+  "version": "0.0.1",
+  "description": "RESTful Visual Editor",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gatools/restful-visual-editor"
+  },
+  "author": "Vasiliy Uglitskiy",
+  "license": "GPLv3",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}

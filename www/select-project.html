@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="us">
+
+<head>
+	<meta charset="utf-8">
+	<title>RESTful Visual Editor</title>
+	<link href="css/main.css" rel="stylesheet">
+	<link href="css/select-project.css" rel="stylesheet">
+</head>
+
+<body class="main-bg-color">
+	<script src="js/jquery-2.2.0.min.js"></script>
+	<script src="js/js.cookie.js"></script>
+	<script src="js/select-project.js"></script>
+
+	<div id='loading_wrap' class="center-middle">Loading, please wait...</div>
+
+	<div id="header">
+		<h1>RESTful Visual Editor</h1>
+	</div>
+
+	<div id="projects" class="center-middle">
+		<div id="project-dialog">
+			<h2 style="margin: 16px auto">Enter project name:</h2>
+			<input id="new-project-name" autofocus />
+			<button id="create-project-done-button">Done</button>
+		</div>
+
+		<ul>
+			<li id="create-new-project" class="clickable">
+				Create new project
+			</li>
+		</ul>
+	</div>
+
+	<footer id="footer">
+		RESTful Visual Editor. Copyright&copy; 2016 Vasiliy Uglitskiy. Open source under GPLv3 license.
+	</footer>
+
+</body>
+
+</html>
