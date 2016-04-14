@@ -2,7 +2,7 @@
 
 This editor allows you to make api documentation for your project.
 
-## Setup:
+## Setup
 Before you begin you need to get the latest Node.js for your distribution by following link: https://nodejs.org/en/download/
 
 Next clone this repo and install dependencies:
